@@ -20,10 +20,10 @@ cameraURL01="http://209.251.247.251:82/cgi-bin/camera?resolution=640&amp;amp;qua
 cameraURL02="http://108.209.209.13/webcapture.jpg?command=snap&amp;channel=1?1507300788"
 cameraURL03="http://72.81.132.14:60001/SnapshotJPEG?Resolution=640x480&amp;amp;Quality=Clarity&amp;amp;1507300872"
 cameraURL04="http://24.98.52.12:8082/cgi-bin/viewer/video.jpg?r=1507300889"
-cameraURL05="http://73.239.2.12:86/cgi-bin/camera?resolution=640&amp;amp;quality=1&amp;amp;Language=0&amp;amp;1507300909"
+cameraURL05="http://80.24.185.230:86/cgi-bin/camera?resolution=640&amp;amp;quality=1&amp;amp;Language=0&amp;amp;1515078226"
 cameraURL06="http://24.23.232.13:50001/cgi-bin/camera?resolution=640&amp;amp;quality=1&amp;amp;Language=0&amp;amp;1507300932"
-cameraURL07="http://72.24.25.12/cgi-bin/camera?resolution=640&amp;amp;quality=1&amp;amp;Language=0&amp;amp;1507300941"
-cameraURL08="http://72.67.198.9:8080/cgi-bin/viewer/video.jpg?r=1507300960"
+cameraURL07="http://80.24.185.230:81/cgi-bin/camera?resolution=640&amp;amp;quality=1&amp;amp;Language=0&amp;amp;1515078327"
+cameraURL08="http://80.24.185.230:82/cgi-bin/camera?resolution=640&amp;amp;quality=1&amp;amp;Language=0&amp;amp;1515078336"
 cameraURL09="http://63.172.41.245/webcapture.jpg?command=snap&amp;channel=1?1508162812"
 cameraURL10="http://73.204.60.243:83/webcapture.jpg?command=snap&amp;channel=1?1508162842"
 cameraURL11="http://69.29.46.9:50000/cgi-bin/camera?resolution=640&amp;amp;quality=1&amp;amp;Language=0&amp;amp;1507300992"
@@ -86,170 +86,157 @@ def main():
 	Timer(0.1, refreshCam15).start()
 	Timer(0.1, refreshCam16).start()
 
+def URL2PhotoImage(URL):
+	return ImageTk.PhotoImage(Image.open(BytesIO(requests.get(URL, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+	
 def refreshCam01():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL01, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL01)
 		image01_label.configure(image=tmp_photo)
 		image01_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#Timer(50, refreshCam02)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam01).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam01).start()
 
 def refreshCam02():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL02, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL02)
 		image02_label.configure(image=tmp_photo)
 		image02_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam03)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam02).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam02).start()
 	
 def refreshCam03():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL03, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL03)
 		image03_label.configure(image=tmp_photo)
 		image03_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam04)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam03).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam03).start()
 	
 def refreshCam04():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL04, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL04)
 		image04_label.configure(image=tmp_photo)
 		image04_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam05)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam04).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam04).start()
 	
 def refreshCam05():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL05, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL05)
 		image05_label.configure(image=tmp_photo)
 		image05_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam06)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam05).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam05).start()
 	
 def refreshCam06():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL06, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL06)
 		image06_label.configure(image=tmp_photo)
 		image06_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam07)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam06).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam06).start()
 	
 def refreshCam07():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL07, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL07)
 		image07_label.configure(image=tmp_photo)
 		image07_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam08)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam07).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam07).start()
 	
 def refreshCam08():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL08, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL08)
 		image08_label.configure(image=tmp_photo)
 		image08_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam09)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam08).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam08).start()
 	
 def refreshCam09():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL09, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL09)
 		image09_label.configure(image=tmp_photo)
 		image09_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam10)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam09).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam09).start()
 	
 def refreshCam10():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL10, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL10)
 		image10_label.configure(image=tmp_photo)
 		image10_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam11)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam10).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam10).start()
 	
 def refreshCam11():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL11, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL11)
 		image11_label.configure(image=tmp_photo)
 		image11_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam12)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam11).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam11).start()
 	
 def refreshCam12():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL12, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL12)
 		image12_label.configure(image=tmp_photo)
 		image12_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam13)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam12).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam12).start()
 	
 def refreshCam13():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL13, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL13)
 		image13_label.configure(image=tmp_photo)
 		image13_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam14)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam13).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam13).start()
 	
 def refreshCam14():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL14, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL14)
 		image14_label.configure(image=tmp_photo)
 		image14_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam15)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam14).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam14).start()
 	
 def refreshCam15():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL15, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL15)
 		image15_label.configure(image=tmp_photo)
 		image15_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam16)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam15).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam15).start()
 	
 def refreshCam16():
 	try:
-		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL16, timeout=4).content)).resize((int(RWidth/4),int(RHeight/4)), Image.ANTIALIAS))
+		tmp_photo = URL2PhotoImage(cameraURL16)
 		image16_label.configure(image=tmp_photo)
 		image16_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	#rootWindow.after(50, refreshCam01)
-	if rootWindow.state() == 'normal': Timer(0.1, refreshCam16).start()
+	if rootWindow.state() == 'normal': Timer(0.05, refreshCam16).start()
 
 
 def close(event=None):
 	rootWindow.quit()
-		
+
 # start the subprocess, main loop, and gui
 if __name__ == '__main__':
 	main()
