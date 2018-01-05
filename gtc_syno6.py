@@ -6,10 +6,18 @@ import requests
 from io import BytesIO
 from threading import Timer
 import json
+import os
 
-SIDJson = requests.get("http://10.123.45.11:5002/webapi/auth.cgi?api=SYNO.API.Auth&method=Login&version=2&account=admin&passwd=abc123&session=SurveillanceStation&format=sid", timeout=4).content
-SIDArr = json.loads(str(SIDJson,'utf-8'))
-SID=SIDArr['data']['sid']
+SID=None
+while SID is None:
+	try:
+		SIDJson = requests.get("http://10.123.45.210:5002/webapi/auth.cgi?api=SYNO.API.Auth&method=Login&version=2&account=admin&passwd=abc123&session=SurveillanceStation&format=sid", timeout=4).content
+		SIDArr = json.loads(str(SIDJson,'utf-8'))
+		SID=SIDArr['data']['sid']
+	except:
+		pass
+
+camSession = requests.Session()
 
 rootWindow = tkinter.Tk()
 
@@ -20,12 +28,12 @@ RHeight = rootWindow.winfo_screenheight()
 rootWindow.overrideredirect(True)	# without a close option
 rootWindow.geometry(("%dx%d")%(RWidth,RHeight))
 
-cameraURL01="http://10.123.45.11:5002/webapi/entry.cgi?camStm=1&version=%228%22&cameraId=15&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
-cameraURL02="http://10.123.45.11:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=22&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
-cameraURL03="http://10.123.45.11:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=23&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
+cameraURL01="http://10.123.45.210:5002/webapi/entry.cgi?camStm=1&version=%228%22&cameraId=15&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
+cameraURL02="http://10.123.45.210:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=22&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
+cameraURL03="http://10.123.45.210:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=23&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
 cameraURL04=""
-cameraURL05="http://10.123.45.11:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=24&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
-cameraURL06="http://10.123.45.11:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=11&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
+cameraURL05="http://10.123.45.210:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=24&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
+cameraURL06="http://10.123.45.210:5002/webapi/entry.cgi?camStm=2&version=%228%22&cameraId=11&api=%22SYNO.SurveillanceStation.Camera%22&preview=true&method=%22GetSnapshot%22&_sid=" + SID
 
 
 image01_label = tkinter.Label()
@@ -48,25 +56,27 @@ image06_label.grid(row=2, column=0)
 	
 def main():
 	rootWindow.bind('<Escape>', close)
-	Timer(0.1, refreshCam01).start()
-	Timer(0.1, refreshCam02).start()
-	Timer(0.1, refreshCam03).start()
-	Timer(0.1, refreshCam04).start()
-	Timer(0.1, refreshCam05).start()
-	Timer(0.1, refreshCam06).start()
-	Timer(0.1, refreshCam07).start()
-	Timer(0.1, refreshCam08).start()
-	Timer(0.1, refreshCam09).start()
+	rootWindow.bind('q', close)
+	Timer(0, refreshCam01).start()
+	Timer(0, refreshCam02).start()
+	Timer(0, refreshCam03).start()
+	Timer(0, refreshCam04).start()
+	Timer(0, refreshCam05).start()
+	Timer(0, refreshCam06).start()
+	Timer(0, refreshCam07).start()
+	Timer(0, refreshCam08).start()
+	Timer(0, refreshCam09).start()
 
 
 def refreshCam01():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL01, timeout=4).content)).resize((int(RWidth/3*2),int(RHeight/3*2)), Image.ANTIALIAS))
 		image01_label.configure(image=tmp_photo)
 		image01_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam01).start()
+	if rootWindow.state() == 'normal': Timer(0.1, refreshCam01).start() # biger camera, slower download, refresh sooner
 
 def refreshCam02():
 	try:
@@ -75,73 +85,79 @@ def refreshCam02():
 		image02_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam02).start()
-	
+	if rootWindow.state() == 'normal': Timer(1, refreshCam02).start()
 def refreshCam03():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL03, timeout=4).content)).resize((int(RWidth/3),int(RHeight/3)), Image.ANTIALIAS))
 		image03_label.configure(image=tmp_photo)
 		image03_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam03).start()
+	if rootWindow.state() == 'normal': Timer(1, refreshCam03).start()
 	
 def refreshCam04():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL04, timeout=4).content)).resize((int(RWidth/3),int(RHeight/3)), Image.ANTIALIAS))
 		image04_label.configure(image=tmp_photo)
 		image04_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam04).start()
+	if rootWindow.state() == 'normal': Timer(1, refreshCam04).start()
 	
 def refreshCam05():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL05, timeout=4).content)).resize((int(RWidth/3),int(RHeight/3)), Image.ANTIALIAS))
 		image05_label.configure(image=tmp_photo)
 		image05_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam05).start()
+	if rootWindow.state() == 'normal': Timer(1, refreshCam05).start()
 	
 def refreshCam06():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL06, timeout=4).content)).resize((int(RWidth/3),int(RHeight/3)), Image.ANTIALIAS))
 		image06_label.configure(image=tmp_photo)
 		image06_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam06).start()
+	if rootWindow.state() == 'normal': Timer(1, refreshCam06).start()
 	
 def refreshCam07():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL07, timeout=4).content)).resize((int(RWidth/3),int(RHeight/3)), Image.ANTIALIAS))
 		image07_label.configure(image=tmp_photo)
 		image07_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam07).start()
+	if rootWindow.state() == 'normal': Timer(1, refreshCam07).start()
 	
 def refreshCam08():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL08, timeout=4).content)).resize((int(RWidth/3),int(RHeight/3)), Image.ANTIALIAS))
 		image08_label.configure(image=tmp_photo)
 		image08_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam08).start()
+	if rootWindow.state() == 'normal': Timer(1, refreshCam08).start()
 	
 def refreshCam09():
+	
 	try:
 		tmp_photo = ImageTk.PhotoImage(Image.open(BytesIO(requests.get(cameraURL09, timeout=4).content)).resize((int(RWidth/3),int(RHeight/3)), Image.ANTIALIAS))
 		image09_label.configure(image=tmp_photo)
 		image09_label.image = tmp_photo # keep a reference to prevent tkinter garbage collection
 	except:
 		pass
-	if rootWindow.state() == 'normal': Timer(0.05, refreshCam09).start()
+	if rootWindow.state() == 'normal': Timer(1, refreshCam09).start()
 
 def close(event=None):
-	rootWindow.quit()
+	os._exit(1)
 
 # start the subprocess, main loop, and gui
 if __name__ == '__main__':
