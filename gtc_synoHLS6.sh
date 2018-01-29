@@ -2,7 +2,7 @@
 
 USERNAME="admin"
 PASSWORD="abc123"
-ADDRESS="192.168.1.10:5000"
+ADDRESS="10.123.45.210:5000"
 
 SID="null"
 while [ $SID == "null" ]
@@ -12,15 +12,16 @@ done
 
 play_stream () {
 	CAMERAID=$1
-	POS=$2
+	QUALITY=$2
+	POS=$3
 	while true; do
 		curl -s --max-time 30 "http://$ADDRESS/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&method=Open&version=1&cameraId=$CAMERAID&format=hls&_sid=$SID"
-		livestreamer "hls://http://$ADDRESS/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&method=Stream&version=1&cameraId=$CAMERAID&format=hls&_sid=$SID" worst  --fifo --player "omxplayer --win $POS --timeout 30"
+		livestreamer "hls://http://$ADDRESS/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&method=Stream&version=1&cameraId=$CAMERAID&format=hls&_sid=$SID" $QUALITY  --fifo --player "omxplayer --win $POS --timeout 30"
 	done
 }
 
-play_stream 15 0,0,853,480 &
-play_stream 22 853,0,1280,240 &
-play_stream 23 853,240,1280,480 &
-play_stream 24 0,480,426,720 &
-play_stream 11 426,480,853,720 &
+play_stream 15 best 0,0,853,480 &
+play_stream 22 worst 853,0,1280,240 &
+play_stream 23 worst 853,240,1280,480 &
+play_stream 24 worst 0,480,426,720 &
+play_stream 11 worst 426,480,853,720 &
