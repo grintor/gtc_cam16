@@ -8,6 +8,7 @@ SID="null"
 while [ $SID == "null" ]
 do
 	SID=$(curl -s --max-time 30 "http://$ADDRESS/webapi/auth.cgi?api=SYNO.API.Auth&method=Login&version=2&account=$USERNAME&passwd=$PASSWORD&session=SurveillanceStation&format=sid" | jq -r '.data.sid')
+	sleep 5
 done
 
 play_stream () {
@@ -17,6 +18,7 @@ play_stream () {
 	while true; do
 		curl -s --max-time 30 "http://$ADDRESS/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&method=Open&version=1&cameraId=$CAMERAID&format=hls&_sid=$SID"
 		livestreamer "hls://http://$ADDRESS/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&method=Stream&version=1&cameraId=$CAMERAID&format=hls&_sid=$SID" $QUALITY  --fifo --player "omxplayer --win $POS --timeout 30"
+		sleep 5
 	done
 }
 
